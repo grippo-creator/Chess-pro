@@ -1,0 +1,106 @@
+class Piece:
+    def __init__(self, color):
+        self.color = color
+
+    def get_possible_moves(self, board, position):
+        raise NotImplementedError("This method should be overridden by subclasses")
+
+
+class King(Piece):
+    def get_possible_moves(self, board, position):
+        # Implement possible moves for King
+        pass
+
+
+class Queen(Piece):
+    def get_possible_moves(self, board, position):
+        # Implement possible moves for Queen
+        pass
+
+
+class Rook(Piece):
+    def get_possible_moves(self, board, position):
+        # Implement possible moves for Rook
+        pass
+
+
+class Bishop(Piece):
+    def get_possible_moves(self, board, position):
+        # Implement possible moves for Bishop
+        pass
+
+
+class Knight(Piece):
+    def get_possible_moves(self, board, position):
+        # Implement possible moves for Knight
+        pass
+
+
+class Pawn(Piece):
+    def get_possible_moves(self, board, position):
+        # Implement possible moves for Pawn
+        pass
+
+
+class Board:
+    def __init__(self):
+        self.board = self.initialize_board()
+
+    def initialize_board(self):
+        # Initialize the board with pieces in their starting positions
+        board = [[None for _ in range(8)] for _ in range(8)]
+        # Add pawns, rooks, knights, bishops, queens, and kings
+        # White pieces
+        board[0] = [Rook('white'), Knight('white'), Bishop('white'), Queen('white'),
+                    King('white'), Bishop('white'), Knight('white'), Rook('white')]
+        board[1] = [Pawn('white')] * 8
+        # Black pieces
+        board[6] = [Pawn('black')] * 8
+        board[7] = [Rook('black'), Knight('black'), Bishop('black'), Queen('black'),
+                    King('black'), Bishop('black'), Knight('black'), Rook('black')]
+        return board
+
+    def print_board(self):
+        # Print the board in a readable format
+        for row in self.board:
+            print(" ".join([str(piece.__class__.__name__[0] if piece else '.') for piece in row]))
+
+
+class Game:
+    def __init__(self):
+        self.board = Board()
+        self.turn = 'white'
+
+    def play_turn(self, start_pos, end_pos):
+        # Move a piece from start_pos to end_pos
+        piece = self.board.board[start_pos[0]][start_pos[1]]
+        if piece and piece.color == self.turn:
+            possible_moves = piece.get_possible_moves(self.board, start_pos)
+            if end_pos in possible_moves:
+                self.board.board[end_pos[0]][end_pos[1]] = piece
+                self.board.board[start_pos[0]][start_pos[1]] = None
+                self.turn = 'black' if self.turn == 'white' else 'white'
+            else:
+                print("Invalid move")
+        else:
+            print("Invalid move or not your turn")
+
+    def is_checkmate(self):
+        # Implement logic to check for checkmate
+        pass
+
+    def is_stalemate(self):
+        # Implement logic to check for stalemate
+        pass
+
+
+if __name__ == "__main__":
+    game = Game()
+    game.board.print_board()
+
+    # Example moves
+    game.play_turn((1, 4), (3, 4))  # White pawn moves forward
+    game.board.print_board()
+
+    game.play_turn((6, 3), (4, 3))  # Black pawn moves forward
+    game.board.print_board()
